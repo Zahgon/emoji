@@ -1,14 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"flag"
-	"fmt"
-	"go/format"
 	"log"
 	"os"
-	"sort"
-	"text/template"
 )
 
 var pkgName string
@@ -66,77 +61,19 @@ func emojiRevCode() map[string][]string {
 `
 
 func createCodeMap() (map[string]string, map[string][]string, error) {
-	log.Printf("creating gemoji code map")
-	emojiCodeMap, err := createGemojiCodeMap()
-	if err != nil {
-		return nil, nil, err
-	}
-
-	log.Printf("creating emojo code map")
-	emojoCodeMap, err := createEmojoCodeMap()
-	if err != nil {
-		return nil, nil, err
-	}
-	for k, v := range emojoCodeMap {
-		emojiCodeMap[k] = v
-	}
-
-	log.Printf("creating unicode code map")
-	unicodeorgCodeMap, err := createUnicodeorgMap()
-	if err != nil {
-		return nil, nil, err
-	}
-	for k, v := range unicodeorgCodeMap {
-		emojiCodeMap[k] = v
-	}
-
-	log.Printf("creating emoji code map")
-	emojiDataCodeMap, err := createEmojiDataCodeMap()
-	if err != nil {
-		return nil, nil, err
-	}
-	for k, v := range emojiDataCodeMap {
-		emojiCodeMap[k] = v
-	}
-
-	log.Printf("creating reverse emoji code map")
-	emojiRevCodeMap := make(map[string][]string)
-	for shortName, unicode := range emojiCodeMap {
-		emojiRevCodeMap[unicode] = append(emojiRevCodeMap[unicode], shortName)
-	}
-
-	// ensure deterministic ordering for aliases
-	for _, value := range emojiRevCodeMap {
-		sort.Slice(value, func(i, j int) bool {
-			if len(value[i]) == len(value[j]) {
-				return value[i] < value[j]
-			}
-			return len(value[i]) < len(value[j])
-		})
-	}
-
-	return emojiCodeMap, emojiRevCodeMap, nil
+	_ = "STUB: not implemented"
+	return nil, nil, nil
 }
+
+// ensure deterministic ordering for aliases
 
 func createCodeMapSource(pkgName string, emojiCodeMap map[string]string, emojiRevCodeMap map[string][]string) ([]byte, error) {
+	_ = "STUB: not implemented"
 	// Template GenerateSource
-
-	var buf bytes.Buffer
-	t := template.Must(template.New("template").Parse(templateMapCode))
-	if err := t.Execute(&buf, TemplateData{PkgName: pkgName, CodeMap: emojiCodeMap, RevCodeMap: emojiRevCodeMap}); err != nil {
-		return nil, err
-	}
-
-	// gofmt
-
-	bts, err := format.Source(buf.Bytes())
-	if err != nil {
-		fmt.Print(buf.String())
-		return nil, fmt.Errorf("gofmt: %s", err)
-	}
-
-	return bts, nil
+	return nil, nil
 }
+
+// gofmt
 
 func main() {
 	emojiCodeMap, emojiRevCodeMap, err := createCodeMap()

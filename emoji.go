@@ -3,11 +3,8 @@ package emoji
 
 import (
 	"bytes"
-	"errors"
-	"fmt"
 	"io"
 	"regexp"
-	"unicode"
 )
 
 //go:generate generateEmojiCodeMap -pkg emoji -o emoji_codemap.go
@@ -19,140 +16,64 @@ var (
 
 // CodeMap gets the underlying map of emoji.
 func CodeMap() map[string]string {
-	return emojiCode()
+	_ = "STUB: not implemented"
+
+	// RevCodeMap gets the underlying map of emoji.
+	return nil
 }
 
-// RevCodeMap gets the underlying map of emoji.
-func RevCodeMap() map[string][]string {
-	return emojiRevCode()
-}
+func RevCodeMap() map[string][]string { _ = "STUB: not implemented"; return nil }
 
-func AliasList(shortCode string) []string {
-	return emojiRevCode()[emojiCode()[shortCode]]
-}
+func AliasList(shortCode string) []string { _ = "STUB: not implemented"; return nil }
 
 // HasAlias flags if the given `shortCode` has multiple aliases with other
 // codes.
-func HasAlias(shortCode string) bool {
-	return len(AliasList(shortCode)) > 1
-}
+func HasAlias(shortCode string) bool { _ = "STUB: not implemented"; return false }
 
 // NormalizeShortCode normalizes a given `shortCode` to a deterministic alias.
-func NormalizeShortCode(shortCode string) string {
-	shortLists := AliasList(shortCode)
-	if len(shortLists) == 0 {
-		return shortCode
-	}
-	return shortLists[0]
-}
+func NormalizeShortCode(shortCode string) string { _ = "STUB: not implemented"; return "" }
 
 // regular expression that matches :flag-[countrycode]:
 var flagRegexp = regexp.MustCompile(":flag-([a-z]{2}):")
 
 // Emojize Converts the string passed as an argument to a emoji. For unsupported emoji, the string passed as an argument is returned as is.
-func Emojize(x string) string {
-	str, ok := emojiCode()[x]
-	if ok {
-		return str + ReplacePadding
-	}
-	if match := flagRegexp.FindStringSubmatch(x); len(match) == 2 {
-		return regionalIndicator(match[1][0]) + regionalIndicator(match[1][1])
-	}
-	return x
-}
+func Emojize(x string) string { _ = "STUB: not implemented"; return "" }
 
 // regionalIndicator maps a lowercase letter to a unicode regional indicator
-func regionalIndicator(i byte) string {
-	return string('\U0001F1E6' + rune(i) - 'a')
-}
+func regionalIndicator(i byte) string { _ = "STUB: not implemented"; return "" }
 
-func replaceEmoji(input *bytes.Buffer) string {
-	emoji := bytes.NewBufferString(":")
-	for {
-		i, _, err := input.ReadRune()
-		if err != nil {
-			// not replace
-			return emoji.String()
-		}
+func replaceEmoji(input *bytes.Buffer) string { _ = "STUB: not implemented"; return "" }
 
-		if i == ':' && emoji.Len() == 1 {
-			return emoji.String() + replaceEmoji(input)
-		}
+// not replace
 
-		emoji.WriteRune(i)
-		switch {
-		case unicode.IsSpace(i):
-			return emoji.String()
-		case i == ':':
-			return Emojize(emoji.String())
-		}
-	}
-}
-
-func compile(x string) string {
-	if x == "" {
-		return ""
-	}
-
-	input := bytes.NewBufferString(x)
-	output := bytes.NewBufferString("")
-
-	for {
-		i, _, err := input.ReadRune()
-		if err != nil {
-			break
-		}
-		switch i {
-		default:
-			output.WriteRune(i)
-		case ':':
-			output.WriteString(replaceEmoji(input))
-		}
-	}
-	return output.String()
-}
+func compile(x string) string { _ = "STUB: not implemented"; return "" }
 
 // Print is fmt.Print which supports emoji
-func Print(a ...interface{}) (int, error) {
-	return fmt.Print(compile(fmt.Sprint(a...)))
-}
+func Print(a ...interface{}) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Println is fmt.Println which supports emoji
-func Println(a ...interface{}) (int, error) {
-	return fmt.Println(compile(fmt.Sprint(a...)))
-}
+func Println(a ...interface{}) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Printf is fmt.Printf which supports emoji
-func Printf(format string, a ...interface{}) (int, error) {
-	return fmt.Print(compile(fmt.Sprintf(format, a...)))
-}
+func Printf(format string, a ...interface{}) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Fprint is fmt.Fprint which supports emoji
-func Fprint(w io.Writer, a ...interface{}) (int, error) {
-	return fmt.Fprint(w, compile(fmt.Sprint(a...)))
-}
+func Fprint(w io.Writer, a ...interface{}) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Fprintln is fmt.Fprintln which supports emoji
-func Fprintln(w io.Writer, a ...interface{}) (int, error) {
-	return fmt.Fprintln(w, compile(fmt.Sprint(a...)))
-}
+func Fprintln(w io.Writer, a ...interface{}) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Fprintf is fmt.Fprintf which supports emoji
 func Fprintf(w io.Writer, format string, a ...interface{}) (int, error) {
-	return fmt.Fprint(w, compile(fmt.Sprintf(format, a...)))
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Sprint is fmt.Sprint which supports emoji
-func Sprint(a ...interface{}) string {
-	return compile(fmt.Sprint(a...))
-}
+func Sprint(a ...interface{}) string { _ = "STUB: not implemented"; return "" }
 
 // Sprintf is fmt.Sprintf which supports emoji
-func Sprintf(format string, a ...interface{}) string {
-	return compile(fmt.Sprintf(format, a...))
-}
+func Sprintf(format string, a ...interface{}) string { _ = "STUB: not implemented"; return "" }
 
 // Errorf is fmt.Errorf which supports emoji
-func Errorf(format string, a ...interface{}) error {
-	return errors.New(compile(Sprintf(format, a...)))
-}
+func Errorf(format string, a ...interface{}) error { _ = "STUB: not implemented"; return nil }
